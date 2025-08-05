@@ -1,5 +1,5 @@
 
-
+#stock screener(not completely ready i am still building this & learning python and i am also interested in ml) 
 
 
 import streamlit as st
@@ -8,10 +8,10 @@ import pandas as pd
 
 st.set_page_config(page_title="📈 Stock Screener", layout="wide")
 
-st.title("📊 Smart Stock Screener")
+st.title("Smart Stock Screener")
 st.markdown("Analyze Nifty 50 or custom stocks by **PE Ratio**, **ROE**, **PEG**, and more!")
 
-# Stock input
+
 default_stocks = ["TCS.NS", "INFY.NS", "WIPRO.NS", "HDFCBANK.NS", "RELIANCE.NS"]
 tickers = st.text_area("Enter comma-separated stock tickers (or leave blank for Nifty 50)", value=", ".join(default_stocks))
 tickers = [x.strip().upper() for x in tickers.split(",") if x.strip()]
@@ -26,8 +26,7 @@ strategy = st.selectbox(
     ]
 )
 
-# Filters
-st.sidebar.header("🔍 Filter Criteria")
+st.sidebar.header("Filter Criteria")
 min_roe = st.sidebar.slider("Minimum ROE (%)", 0.0, 50.0, 15.0)
 max_pe = st.sidebar.slider("Maximum PE Ratio", 0.0, 100.0, 25.0)
 min_market_cap = st.sidebar.slider("Minimum Market Cap (in ₹ Cr)", 0, 500000, 5000)
@@ -90,11 +89,11 @@ if tickers:
     st.subheader("📄 Filtered Stocks")
     st.dataframe(df_filtered.sort_values(by="ROE", ascending=False), use_container_width=True)
 
-    st.subheader("📂 Sector-wise Best Picks")
+    st.subheader("Sector-wise Best Picks")
     for sector in df_filtered["Sector"].unique():
         sector_df = df_filtered[df_filtered["Sector"] == sector]
         if not sector_df.empty:
             best = sector_df.sort_values(by="ROE", ascending=False).iloc[0]
             st.markdown(
-                f"**{sector}** → 🏆 {best['Company']} | PE: {round(best['PE'],2)} | ROE: {round(best['ROE'],2)}% | PEG: {best['PEG']} | MCap: ₹{round(best['Market Cap (₹ Cr)'], 2)} Cr"
+                f"**{sector}**  {best['Company']} | PE: {round(best['PE'],2)} | ROE: {round(best['ROE'],2)}% | PEG: {best['PEG']} | MCap: ₹{round(best['Market Cap (₹ Cr)'], 2)} Cr"
             )
